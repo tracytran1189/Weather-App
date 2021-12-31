@@ -36,6 +36,7 @@ searchButton.onclick = (event) => {
         var currentWeather = data.oneCallResponse.current;
         var cityName = data.currentWeatherReponse.name;
         setCurrentWeather(currentWeather, cityName);
+        setFutureForecast(data.oneCallResponse.daily);
     });
 };
 
@@ -54,4 +55,28 @@ function setCurrentWeather(currentWeather, cityName) {
 
     var uvValue = document.querySelector('#city-uv .value');
     uvValue.textContent = `${currentWeather.uvi}`
+}
+
+function setFutureForecast(dailyForecasts) {
+    for (var i=1; i<6; i++) {
+        addFutureForecast(dailyForecasts[i], i);
+    }
+}
+
+function addFutureForecast(forecast, dayIndex) {
+    var futureForecastContainer = document.getElementById('5-days-container');
+
+    var foreCastEl = document.createElement('div');
+    foreCastEl.id = `future-forecast-${dayIndex}`;
+    foreCastEl.className = 'future-forecast';
+
+    var dateEl = document.createElement('div');
+    dateEl.textContent = (new Date(forecast.dt * 1000)).toLocaleDateString();
+    foreCastEl.append(dateEl);
+
+    var tempEl = document.createElement('div');
+    tempEl.textContent = forecast.temp.day;
+    foreCastEl.append(tempEl);
+
+    futureForecastContainer.append(foreCastEl);
 }
