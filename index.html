@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Staatliches&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"/>
-    <link rel="stylesheet" href="./assets/css/style.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Staatliches&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" />
+    <link rel="stylesheet" href="./assets/css/style.css" />
     <title>Weather App</title>
 </head>
 
 <body class="flex-column min-100-vh">
     <header class="hero">
         <h1 class="app-title center"> Weather Dashboard</h1>
-    
     </header>
 
 
@@ -33,14 +33,32 @@
         </div>
 
         <div class="col-sm-9">
-                <h2 class="result">Showing Result: <span id="city-search-term"></span></h2>
-                <div id="city-container" class="list-group"></div>
-                <h2 class="5-days-forecast">5-Day Forcast</h2>
-                <div id="5-days-container" class="5-days"></div>
+            <h2 class="result">Showing Result: <span id="city-search-term"></span></h2>
+            <div id="city-container" class="list-group">
+                <div id="city-name"></div>
+                <div id="city-temp">
+                    <span class="key">Temp: </span>
+                    <span class="value"></span>
+                </div>
+                <div id="city-wind">
+                    <span class="key">Wind: </span>
+                    <span class="value"></span>
+                </div>
+                <div id="city-humidity">
+                    <span class="key">Humidity: </span>
+                    <span class="value"></span>
+                </div>
+                <div id="city-uv">
+                    <span class="key">UV Index: </span>
+                    <span class="value"></span> 
+                </div>
+            </div>
+            <h2 class="5-days-forecast">5-Day Forcast</h2>
+            <div id="5-days-container" class="5-days"></div>
         </div>
-        
-        </main>
-        <script src="./assets/javaSript/javaScript.js"></script>
-    </body>
-    
-    </html>
+
+    </main>
+    <script src="./assets/javaSript/javaScript.js"></script>
+</body>
+
+</html>
