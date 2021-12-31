@@ -5,3 +5,10 @@
   h1 {
       text-align: center;
   }
+
+.future-forecast {
+    border: 2px;
+    border-radius: 15px;
+    background-color: rgb(70, 130, 185);
+    color: white;
+}

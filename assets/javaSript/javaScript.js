@@ -26,7 +26,6 @@ var cityInput = document.getElementById('city');
 
 searchButton.onclick = (event) => {
     event.preventDefault();
-
     var cityName = cityInput.value;
 
     console.log('search', cityName);
@@ -37,10 +36,13 @@ searchButton.onclick = (event) => {
         var cityName = data.currentWeatherReponse.name;
         setCurrentWeather(currentWeather, cityName);
         setFutureForecast(data.oneCallResponse.daily);
+        localStorage.setItem(cityName,data);
+       
     });
 };
 
 function setCurrentWeather(currentWeather, cityName) {
+
     var cityNameEl = document.getElementById('city-name');
     cityNameEl.textContent = `${cityName} (${(new Date()).toLocaleDateString()})`
 
@@ -59,24 +61,71 @@ function setCurrentWeather(currentWeather, cityName) {
 
 function setFutureForecast(dailyForecasts) {
     for (var i=1; i<6; i++) {
+       
         addFutureForecast(dailyForecasts[i], i);
+        
     }
 }
-
 function addFutureForecast(forecast, dayIndex) {
-    var futureForecastContainer = document.getElementById('5-days-container');
-
+    var futureForecastContainer = document.getElementById('5-days-row');
     var foreCastEl = document.createElement('div');
-    foreCastEl.id = `future-forecast-${dayIndex}`;
-    foreCastEl.className = 'future-forecast';
+    foreCastEl.id = `future-forecast-${dayIndex} `;
+    foreCastEl.className = 'future-forecast col border m-2';
 
     var dateEl = document.createElement('div');
     dateEl.textContent = (new Date(forecast.dt * 1000)).toLocaleDateString();
     foreCastEl.append(dateEl);
 
+    // //add weather condition images
+var clear =document.createElement('img');
+clear.src="http://openweathermap.org/img/wn/01d@2x.png";
+var clouds =document.createElement('img');
+clouds.src="http://openweathermap.org/img/wn/02d@2x.png";
+var snow =document.createElement('img');
+snow.src="http://openweathermap.org/img/wn/13d@2x.png";
+var rain =document.createElement('img');
+rain.src="http://openweathermap.org/img/wn/10d@2x.png";
+var drizzle =document.createElement('img');
+drizzle.src="http://openweathermap.org/img/wn/04d@2x.png";
+var thunderstorm =document.createElement('img');
+thunderstorm.src="http://openweathermap.org/img/wn/11d@2x.png";
+var atmoshere =document.createElement('img');
+atmoshere.src="http://openweathermap.org/img/wn/50d@2x.png";
+    if(forecast.weather.main ==="Clear" ) {
+        foreCastEl.append(clear);
+    } 
+    if(forecast.weather.main ==="Clouds") {
+        foreCastEl.append(clouds);
+    }
+    if(forecast.weather.main ==="Snow") {
+        foreCastEl.append(snow);
+    }
+    if(forecast.weather.main ==="Rain") {
+        foreCastEl.append(rain);
+    }
+    if(forecast.weather.main ==="Drizzle") {
+        foreCastEl.append(drizzle);
+    }
+    if(forecast.weather.main ==="Thunderstorm") {
+        foreCastEl.append(thunderstorm);
+    }
+    else {
+        foreCastEl.append(atmoshere);  
+}
+
     var tempEl = document.createElement('div');
-    tempEl.textContent = forecast.temp.day;
+    tempEl.textContent = ("Temp: " + forecast.temp.day +"°F");
     foreCastEl.append(tempEl);
+
+    var windEl = document.createElement('div');
+    windEl.textContent = ("Wind: " + forecast.wind_speed + "mph");
+    foreCastEl.append(windEl);
+
+    var humidityEl = document.createElement('div');
+    humidityEl.textContent = ("Humidity: " + forecast.humidity + "%");
+    foreCastEl.append(humidityEl);
 
     futureForecastContainer.append(foreCastEl);
 }
+
+
