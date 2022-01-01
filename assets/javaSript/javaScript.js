@@ -1,9 +1,10 @@
-var apiKey= "0a049cb78e7e615e6af6861a230a5dd9";
-var getCityForecast = function(cityName) {
+//fetch data from weather API
+var apiKey = "0a049cb78e7e615e6af6861a230a5dd9";
+var getCityForecast = function (cityName) {
     var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + apiKey + "&units=imperial";
-    return fetch(apiUrl).then(function(response) {
+    return fetch(apiUrl).then(function (response) {
         return response.json().then(data => {
-            var {lat, lon} = data.coord;
+            var { lat, lon } = data.coord;
             return getOneCallApi(lat, lon).then(oneCallResponse => {
                 return {
                     currentWeatherReponse: data,
@@ -14,13 +15,24 @@ var getCityForecast = function(cityName) {
     });
 };
 
-var getOneCallApi = function(lat, lon) {
+var searchHistory = localStorage.getItem('search-history');
+
+// if no search history, set as empty list
+if (!searchHistory) {
+    searchHistory = [];
+    localStorage.setItem('search-history', JSON.stringify(searchHistory));
+} else {
+    searchHistory = JSON.parse(searchHistory);
+}
+
+var getOneCallApi = function (lat, lon) {
     var apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`;
-    return fetch(apiUrl).then(function(response) {
+    return fetch(apiUrl).then(function (response) {
         return response.json().then(data => data);
     });
 }
 
+//add onClick for search button
 var searchButton = document.getElementById('search-button');
 var cityInput = document.getElementById('city');
 
@@ -29,22 +41,58 @@ searchButton.onclick = (event) => {
     var cityName = cityInput.value;
 
     console.log('search', cityName);
+    showWeatherData(cityName);
+};
+
+//show searched list
+var searchedContainer = document.getElementById('searched-container');
+showSearchHistory();
+
+function showSearchHistory() {
+
+    // remove child elements if they exist
+    while (searchedContainer.firstChild) {
+        searchedContainer.removeChild(searchedContainer.firstChild);
+    }
+
+    for (var i=0; i<searchHistory.length; i++) {
+        var searchItem = document.createElement('div');
+        var searchItemButton = document.createElement('button');
+        searchItemButton.textContent = searchHistory[i];
+        searchItemButton.onclick = function(event) {
+            var cityName = event.target.innerText;
+            showWeatherData(cityName);
+        }
+    
+        searchItem.append(searchItemButton);
+        searchedContainer.append(searchItem);
+    }
+}
+
+function showWeatherData(cityName) {
     getCityForecast(cityName).then(data => {
         console.log('city data', data);
-
+    
         var currentWeather = data.oneCallResponse.current;
         var cityName = data.currentWeatherReponse.name;
         setCurrentWeather(currentWeather, cityName);
         setFutureForecast(data.oneCallResponse.daily);
-        localStorage.setItem(cityName,data);
-       
+    
+        addToSearchHistory(cityName);
+        showSearchHistory();
     });
-};
+}
 
+//get data for current weather
 function setCurrentWeather(currentWeather, cityName) {
 
     var cityNameEl = document.getElementById('city-name');
     cityNameEl.textContent = `${cityName} (${(new Date()).toLocaleDateString()})`
+    var currentIconSpan = document.createElement('span');
+    var currentIcon = document.createElement('img');
+    currentIcon.src = `http://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@2x.png`
+    currentIconSpan.append(currentIcon);
+    cityNameEl.append(currentIconSpan);
 
     var tempValue = document.querySelector('#city-temp .value');
     tempValue.textContent = `${currentWeather.temp}°F`;
@@ -57,64 +105,55 @@ function setCurrentWeather(currentWeather, cityName) {
 
     var uvValue = document.querySelector('#city-uv .value');
     uvValue.textContent = `${currentWeather.uvi}`
+
+    showUvCode();
 }
 
+//show color code for UV index
+var showUvCode = function () {
+
+    var uvValue = document.querySelector('#city-uv .value');
+
+    if (uvValue.textContent <= 2) {
+        uvValue.className = 'value favorable'
+    } else if (uvValue.textContent > 2 && uvValue.textContent <= 8) {
+        uvValue.className = 'value moderate'
+    } else {
+        uvValue.className = 'value severe'
+    };
+}
+
+//get data for 5 days forecast
 function setFutureForecast(dailyForecasts) {
-    for (var i=1; i<6; i++) {
-       
+
+    var futureForecastContainer = document.getElementById('5-days-row');
+    // remove child elements if they exist
+    while (futureForecastContainer.firstChild) {
+        futureForecastContainer.removeChild(futureForecastContainer.firstChild);
+    }
+
+    for (var i = 1; i < 6; i++) {
         addFutureForecast(dailyForecasts[i], i);
-        
     }
 }
 function addFutureForecast(forecast, dayIndex) {
     var futureForecastContainer = document.getElementById('5-days-row');
     var foreCastEl = document.createElement('div');
     foreCastEl.id = `future-forecast-${dayIndex} `;
-    foreCastEl.className = 'future-forecast col border m-2';
+    foreCastEl.className = 'future-forecast col m-2';
 
     var dateEl = document.createElement('div');
     dateEl.textContent = (new Date(forecast.dt * 1000)).toLocaleDateString();
     foreCastEl.append(dateEl);
 
-    // //add weather condition images
-var clear =document.createElement('img');
-clear.src="http://openweathermap.org/img/wn/01d@2x.png";
-var clouds =document.createElement('img');
-clouds.src="http://openweathermap.org/img/wn/02d@2x.png";
-var snow =document.createElement('img');
-snow.src="http://openweathermap.org/img/wn/13d@2x.png";
-var rain =document.createElement('img');
-rain.src="http://openweathermap.org/img/wn/10d@2x.png";
-var drizzle =document.createElement('img');
-drizzle.src="http://openweathermap.org/img/wn/04d@2x.png";
-var thunderstorm =document.createElement('img');
-thunderstorm.src="http://openweathermap.org/img/wn/11d@2x.png";
-var atmoshere =document.createElement('img');
-atmoshere.src="http://openweathermap.org/img/wn/50d@2x.png";
-    if(forecast.weather.main ==="Clear" ) {
-        foreCastEl.append(clear);
-    } 
-    if(forecast.weather.main ==="Clouds") {
-        foreCastEl.append(clouds);
-    }
-    if(forecast.weather.main ==="Snow") {
-        foreCastEl.append(snow);
-    }
-    if(forecast.weather.main ==="Rain") {
-        foreCastEl.append(rain);
-    }
-    if(forecast.weather.main ==="Drizzle") {
-        foreCastEl.append(drizzle);
-    }
-    if(forecast.weather.main ==="Thunderstorm") {
-        foreCastEl.append(thunderstorm);
-    }
-    else {
-        foreCastEl.append(atmoshere);  
-}
+    var weatherIconCode = forecast.weather[0].icon;
+    var iconUrl = `http://openweathermap.org/img/wn/${weatherIconCode}@2x.png`;
+    var iconEl = document.createElement('img');
+    iconEl.src = iconUrl;
+    foreCastEl.append(iconEl);
 
     var tempEl = document.createElement('div');
-    tempEl.textContent = ("Temp: " + forecast.temp.day +"°F");
+    tempEl.textContent = ("Temp: " + forecast.temp.day + "°F");
     foreCastEl.append(tempEl);
 
     var windEl = document.createElement('div');
@@ -128,4 +167,18 @@ atmoshere.src="http://openweathermap.org/img/wn/50d@2x.png";
     futureForecastContainer.append(foreCastEl);
 }
 
+function addToSearchHistory(cityName) {
 
+    var duplicateIndex = searchHistory.findIndex(x => cityName.toUpperCase() === x.toUpperCase());
+    if (duplicateIndex !== -1) {
+        searchHistory.splice(duplicateIndex, 1);
+    }
+
+    searchHistory.unshift(cityName);
+
+    if (searchHistory.length > 5) {
+        searchHistory.pop();
+    }
+
+    localStorage.setItem('search-history', JSON.stringify(searchHistory));
+}

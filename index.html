@@ -22,15 +22,15 @@
     <main class="row justify-space-between">
         <div class="col-sm-2">
             <div class="card">
-                <h3 class="card-header text-uppercase">Enter City Name:</h3>
+                <h4 class="card-header text-uppercase">Enter City Name:</h4>
                 <form id="city-form" class="card-body">
                     <!-- <label class="form-label" for="city">Enter City</label> -->
-                    <input name="city" id="city" type="text" autofocus="true" class="form-input" />
-                    <button id="search-button" type="submit" class="btn btn-outline-info mt-2">Search</button>
+                    <input name="city" id="city" type="text" autofocus="true" class="form-input w-100" />
+                    <button id="search-button" type="submit" class="btn btn-outline-info mt-2 w-100">Search</button>
                 </form>
             </div>
             <div class="history">
-                <div id="searched-container" class="searched-city"></div>
+                <div id="searched-container" class="searched-cities"></div>
             </div>
         </div>
 
@@ -57,7 +57,7 @@
             </div>
             <h3 class="5-days-forecast pt-3">5-Day Forecast: </h3>
             <div id="5-days-container" class="5-days container">
-                <div id="5-days-row" class="row 5-days-row border-secondary px-2"></div>
+                <div id="5-days-row" class="row 5-days-row "></div>
             </div>
         </div>
 
