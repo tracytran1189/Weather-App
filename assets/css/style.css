@@ -12,6 +12,9 @@
     background-color: rgb(70, 130, 185);
     color: white;
 }
+.list-group {
+    max-width: 100%;
+}
 
 .favorable {
     background-color: green;
@@ -21,6 +24,6 @@
     background-color: yellow;
 }
 
-.sereve {
+.severe {
     background-color: red;
 }

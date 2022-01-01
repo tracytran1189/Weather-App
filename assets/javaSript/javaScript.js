@@ -58,6 +58,7 @@ function showSearchHistory() {
     for (var i=0; i<searchHistory.length; i++) {
         var searchItem = document.createElement('div');
         var searchItemButton = document.createElement('button');
+        searchItemButton.className="city-button btn-outline-secondary mt-2 w-100"
         searchItemButton.textContent = searchHistory[i];
         searchItemButton.onclick = function(event) {
             var cityName = event.target.innerText;
@@ -115,11 +116,11 @@ var showUvCode = function () {
     var uvValue = document.querySelector('#city-uv .value');
 
     if (uvValue.textContent <= 2) {
-        uvValue.className = 'value favorable'
+        uvValue.className = 'value favorable px-2'
     } else if (uvValue.textContent > 2 && uvValue.textContent <= 8) {
-        uvValue.className = 'value moderate'
+        uvValue.className = 'value moderate px-2'
     } else {
-        uvValue.className = 'value severe'
+        uvValue.className = 'value severe px-2'
     };
 }
 
