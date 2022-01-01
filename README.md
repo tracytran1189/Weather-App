@@ -15,4 +15,4 @@ So that I can plan a trip accordingly.
 ## **Website** :
 https://tracytran1189.github.io/Weather-App/
 
-![alt-text](assets/Image/website.jpg)
+![alt-text](assets/Image/website.png)
